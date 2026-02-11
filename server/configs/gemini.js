@@ -1,21 +1,54 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import 'dotenv/config';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+// Initialize the SDK and clean the API key
+const rawApiKey = process.env.GEMINI_API_KEY || "";
+const apiKey = rawApiKey.replace(/['"]+/g, '').trim();
+
+if (!apiKey) {
+  console.error("CRITICAL: GEMINI_API_KEY is missing from .env");
+}
+
+const genAI = new GoogleGenerativeAI(apiKey);
 
 async function main(prompt) {
-  try {
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text();
-  } catch (error) {
-    if (error.status === 429) {
-      console.error("Gemini API Error: Quota exhausted for 2.0. Switched to 1.5.");
-      return "Error: AI rate limit exceeded. Please wait a moment.";
+  // Verified available models for this key:
+  const modelsToTry = [
+    "gemini-2.0-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-2.0-flash",
+    "gemini-exp-1206"
+  ];
+
+  let lastError = null;
+
+  for (const modelName of modelsToTry) {
+    try {
+      console.log(`Attempting to use model: ${modelName}...`);
+      const model = genAI.getGenerativeModel({ model: modelName });
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      const text = response.text();
+
+      if (text) {
+        console.log(`Success with model: ${modelName}`);
+        return text;
+      }
+    } catch (error) {
+      lastError = error;
+      console.error(`Model ${modelName} failed: ${error.status || 'Error'}: ${error.message}`);
+
+      // If it's a quota error (429), try the next model in the list
+      if (error.message.includes("429")) {
+        console.log(`Quota exceeded for ${modelName}, trying next...`);
+        continue;
+      }
+      // Continue for 404 or other errors
     }
-    console.error("Gemini Error:", error.message);
-    return "An error occurred while generating content.";
   }
+
+  return `Error: All available AI models failed. (Last error: ${lastError?.message})`;
 }
 
 export default main;
