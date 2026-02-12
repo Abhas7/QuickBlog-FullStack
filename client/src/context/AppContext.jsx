@@ -11,12 +11,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children })=>{
 
     const navigate = useNavigate() 
-
-    try {
-        
-    } catch (error) {
-        
-    }
+    
 
     const [token, setToken] = useState(null)
     const [blogs, setBlogs] = useState([])
