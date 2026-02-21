@@ -1,40 +1,100 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
-*{
-  font-family: "Outfit", sans-serif;
+@theme {
+  --color-primary: #3B5241;
+  --color-secondary: #8BA889;
+  --color-accent: #C9A07E;
+  --color-canvas: #FAF9F6;
+  --color-ink: #1F2420;
+
+  --font-serif: "Instrument Serif", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Instrument+Serif:ital@0;1&display=swap');
+
+  * {
+    @apply font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .serif {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/30;
+  }
+
+  .card-shadow {
+    box-shadow: 0 20px 50px -12px rgba(59, 82, 65, 0.08);
+  }
+
+  .rich-text {
+    @apply text-lg text-primary/80 leading-relaxed font-light;
+  }
+
+  .rich-text p {
+    @apply mb-8;
+  }
+
+  .rich-text h1 {
+    @apply text-5xl font-normal italic text-ink mb-10 mt-16;
+  }
+
+  .rich-text h2 {
+    @apply text-3xl font-normal italic text-ink mb-8 mt-12;
+  }
+
+  .rich-text h3 {
+    @apply text-2xl font-normal italic text-ink mb-6 mt-10;
+  }
+
+  .rich-text strong {
+    @apply font-bold text-ink;
+  }
+
+  .rich-text ol {
+    @apply ml-8 list-decimal space-y-4 mb-8;
+  }
+
+  .rich-text ul {
+    @apply ml-8 list-disc space-y-4 mb-8;
+  }
+
+  .rich-text a {
+    @apply text-primary border-b border-primary/20 hover:border-primary transition-all pb-0.5;
+  }
+
+  .rich-text img {
+    @apply rounded-[32px] my-12 shadow-2xl shadow-primary/5;
+  }
 }
 
 ::-webkit-scrollbar {
   display: none;
 }
 
-@theme {
-  --color-primary: #5044E5; 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.rich-text { font-size: 15px;  }
-
-.rich-text p { margin-bottom: 16px; color: #292929; }
-
-.rich-text h1 { font-size: 36px; font-weight: 700; color: #252525 !important; margin: 32px 0; }
-
-.rich-text h2 { font-size: 22px; font-weight: 700; color: #252525 !important; margin: 24px 0; }
-
-.rich-text h3 { font-size: 18px; font-weight: 600; color: #333333 !important; margin: 20px 0; }
-
-.rich-text h4 { font-size: 16px; font-weight: 500; color: #444444 !important; margin: 16px 0; }
-
-.rich-text h5 { font-size: 14px; font-weight: 400; color: #555555 !important; margin: 12px 0; }
-
-.rich-text h6 { font-size: 12px; font-weight: 400; color: #666666 !important; margin: 8px 0; }
-
-.rich-text strong { font-weight: 700; }
-
-.rich-text ol { margin-left: 30px; list-style-type: decimal; }
-
-.rich-text ul { margin-left: 30px; list-style-type: disc; }
-
-.rich-text li { margin-bottom: 8px; }
-
-.rich-text a { color: #007AFF }
+.animate-fade-in {
+  animation: fade-in 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
