@@ -29,7 +29,7 @@ const Dashboard = () => {
     }, [])
 
     return (
-        <div className='animate-in fade-in duration-700'>
+        <div className='w-full opacity-100 transition-opacity duration-300'>
             <div className='mb-12'>
                 <h2 className='text-4xl font-serif text-text-dark mb-2'>Dashboard <span className='italic text-primary ml-1'>Overview</span></h2>
                 <p className='text-text-muted'>A snapshot of your journal's growth and engagement.</p>
@@ -90,18 +90,16 @@ const Dashboard = () => {
                             </tr>
                         </thead>
                         <tbody className='divide-y divide-accent/5'>
-                            {dashboardData.recentBlogs.map((blog, index) => {
+                            {dashboardData.recentBlogs && dashboardData.recentBlogs.map((blog, index) => {
                                 return <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchDashboard} index={index + 1} />
                             })}
-                            {dashboardData.recentBlogs.length === 0 && (
-                                <tr>
-                                    <td colSpan="5" className='px-8 py-12 text-center text-text-muted italic'>
-                                        No recent stories found.
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
+                    {(!dashboardData.recentBlogs || dashboardData.recentBlogs.length === 0) && (
+                        <div className='px-8 py-12 text-center text-text-muted italic bg-white'>
+                            No recent stories found.
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

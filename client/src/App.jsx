@@ -14,14 +14,20 @@ import { useAppContext } from './context/AppContext'
 
 const App = () => {
 
-  const { token } = useAppContext()
+  const { token, checkingAuth } = useAppContext()
+
+  if (checkingAuth) {
+    return <div className='min-h-screen bg-bg-base flex items-center justify-center font-serif text-2xl text-primary animate-pulse italic'>Synchronizing Journal...</div>
+  }
 
   return (
-    <div>
-      <Toaster />
+    <div className='min-h-screen bg-bg-base transition-colors duration-500'>
+      <Toaster position="bottom-right" />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/blog/:id' element={<Blog />} />
+
+        {/* Admin Routes */}
         <Route path='/admin' element={token ? <Layout /> : <Login />}>
           <Route index element={<Dashboard />} />
           <Route path='addBlog' element={<AddBlog />} />
