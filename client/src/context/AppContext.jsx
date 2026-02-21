@@ -14,7 +14,6 @@ export const AppProvider = ({ children }) => {
 
 
     const [token, setToken] = useState(null)
-    const [checkingAuth, setCheckingAuth] = useState(true)
     const [blogs, setBlogs] = useState([])
     const [input, setInput] = useState("")
 
@@ -23,22 +22,21 @@ export const AppProvider = ({ children }) => {
             const { data } = await axios.get('/api/blog/all');
             data.success ? setBlogs(data.blogs) : toast.error(data.message)
         } catch (error) {
-            console.log(error.message)
+            toast.error(error.message)
         }
     }
 
     useEffect(() => {
         fetchBlogs();
-        const storedToken = localStorage.getItem('token')
-        if (storedToken) {
-            setToken(storedToken);
-            axios.defaults.headers.common['Authorization'] = `${storedToken}`;
+        const token = localStorage.getItem('token')
+        if (token) {
+            setToken(token);
+            axios.defaults.headers.common['Authorization'] = `${token}`;
         }
-        setCheckingAuth(false);
     }, [])
 
     const value = {
-        axios, navigate, token, setToken, blogs, setBlogs, input, setInput, checkingAuth
+        axios, navigate, token, setToken, blogs, setBlogs, input, setInput
     }
 
     return (
