@@ -4,62 +4,46 @@ import { useAppContext } from '../context/AppContext'
 
 const Header = () => {
 
-  const { setInput, input } = useAppContext()
+  const {setInput, input} = useAppContext()
   const inputRef = useRef()
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    setInput(inputRef.current.value)
+  const onSubmitHandler = async (e)=>{
+     e.preventDefault();
+     setInput(inputRef.current.value)
   }
 
-  const onClear = () => {
+  const onClear = ()=>{
     setInput('')
     inputRef.current.value = ''
   }
 
   return (
-    <div className='px-6 sm:px-12 md:px-24 pt-16 pb-20 relative overflow-hidden'>
-      <div className='max-w-4xl mx-auto text-center relative z-10'>
+    <div className='mx-8 sm:mx-16 xl:mx-24 relative'>
+      <div className='text-center mt-20 mb-8'>
 
-        <div className='inline-flex items-center gap-2 px-4 py-1.5 mb-8 border border-primary/20 bg-primary/5 rounded-full text-sm font-medium text-primary'>
-          <span className='relative flex h-2 w-2'>
-            <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75'></span>
-            <span className='relative inline-flex rounded-full h-2 w-2 bg-primary'></span>
-          </span>
-          <p className='text-xs sm:text-sm'>Modern blogging for professional growth</p>
+        <div className='inline-flex items-center justify-center gap-4 px-6 py-1.5 mb-4 border border-primary/40 bg-primary/10 rounded-full text-sm text-primary'>
+            <p>New: AI feature integrated</p>
+            <img src={assets.star_icon} className='w-2.5' alt="" />
         </div>
 
-        <h1 className='text-5xl sm:text-7xl md:text-8xl font-serif text-text-dark leading-[1.05] tracking-tight mb-8'>
-          Share Your <span className='italic text-primary'>Perspective</span> <br /> with Elegance.
-        </h1>
+        <h1 className='text-3xl sm:text-6xl font-semibold sm:leading-16 text-gray-700'>Your own <span className='text-primary'> blogging</span> <br/> platform.</h1>
 
-        <p className='text-lg sm:text-xl text-text-muted max-w-2xl mx-auto leading-relaxed mb-12'>
-          A refined space for therapists, coaches, and thinkers to share insights and inspire positive change through soulful writing.
-        </p>
+        <p className='my-6 sm:my-8 max-w-2xl m-auto max-sm:text-xs text-gray-500'>This is your space to think out loud, to share what matters, and to write without filters. Whether it's one word or a thousand, your story starts right here.</p>
 
-        <form onSubmit={onSubmitHandler} className='flex items-center bg-white p-2 rounded-full border border-accent/30 shadow-xl shadow-primary/5 max-w-lg mx-auto transition-focus-within focus-within:border-primary/50'>
-          <div className='flex-1 flex items-center pl-4'>
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <input ref={inputRef} type="text" placeholder='Search for insights...' required className='w-full pl-3 pr-4 py-2 bg-transparent outline-none text-text-dark placeholder:text-gray-400' />
-          </div>
-          <button type="submit" className='bg-primary text-white px-8 py-3 rounded-full font-medium transition-all hover:bg-primary/90 active:scale-95 cursor-pointer shadow-lg shadow-primary/20'>
-            Search
-          </button>
+        <form onSubmit={onSubmitHandler} className='flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-white rounded overflow-hidden'>
+            <input ref={inputRef} type="text" placeholder='Search for blogs' required className='w-full pl-4 outline-none'/>
+            <button type="submit" className='bg-primary text-white px-8 py-2 m-1.5 rounded hover:scale-105 transition-all cursor-pointer'>Search</button>
         </form>
 
-        {input && (
-          <div className='mt-6'>
-            <button onClick={onClear} className='text-sm text-text-muted hover:text-primary transition-colors flex items-center justify-center gap-2 mx-auto cursor-pointer'>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-              Clear search: "{input}"
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* Abstract decorative elements common in ClearPath */}
-      <div className='absolute -top-24 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl'></div>
-      <div className='absolute top-1/2 -left-24 w-64 h-64 bg-accent/20 rounded-full blur-3xl'></div>
+      <div className='text-center'>
+        {
+        input && <button onClick={onClear} className='border font-light text-xs py-1 px-3 rounded-sm shadow-custom-sm cursor-pointer'>Clear Search</button>
+        }
+      </div>
+
+      <img src={assets.gradientBackground} alt="" className='absolute -top-50 -z-1 opacity-50'/>
     </div>
   )
 }

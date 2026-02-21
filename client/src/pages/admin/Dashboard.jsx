@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { assets } from '../../assets/assets'
+import { assets, dashboard_data } from '../../assets/assets'
 import BlogTableItem from '../../components/admin/BlogTableItem'
 import { useAppContext } from '../../context/AppContext'
 import toast from 'react-hot-toast'
@@ -15,97 +15,77 @@ const Dashboard = () => {
 
     const { axios } = useAppContext()
 
-    const fetchDashboard = async () => {
-        try {
-            const { data } = await axios.get('/api/admin/dashboard')
-            data.success ? setDashboardData(data.dashboardData) : toast.error(data.message)
-        } catch (error) {
+     const fetchDashboard = async ()=>{
+       try {
+         const {data} = await axios.get('/api/admin/dashboard')
+         data.success ? setDashboardData(data.dashboardData) : toast.error(data.message)
+       } catch (error) {
             toast.error(error.message)
-        }
-    }
+       }
+     }
 
-    useEffect(() => {
+     useEffect(()=>{
         fetchDashboard()
-    }, [])
+     },[])
 
-    return (
-        <div className='animate-in fade-in duration-700'>
-            <div className='mb-12'>
-                <h2 className='text-4xl font-serif text-text-dark mb-2'>Dashboard <span className='italic text-primary ml-1'>Overview</span></h2>
-                <p className='text-text-muted'>A snapshot of your journal's growth and engagement.</p>
-            </div>
+  return (
+    <div className='flex-1 p-4 md:p-10 bg-blue-50/50'>
 
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16'>
-                <div className='flex items-center gap-6 bg-white p-8 rounded-[32px] border border-accent/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer group'>
-                    <div className='w-16 h-16 rounded-2xl bg-primary/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors'>
-                        <img src={assets.dashboard_icon_1} className='w-8' alt="blogs" />
-                    </div>
-                    <div>
-                        <p className='text-3xl font-serif text-text-dark'>{dashboardData.blogs}</p>
-                        <p className='text-xs font-bold uppercase tracking-widest text-text-muted mt-1'>Total Stories</p>
-                    </div>
-                </div>
+        <div className='flex flex-wrap gap-4'>
 
-                <div className='flex items-center gap-6 bg-white p-8 rounded-[32px] border border-accent/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer group'>
-                    <div className='w-16 h-16 rounded-2xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors'>
-                        <img src={assets.dashboard_icon_2} className='w-8' alt="comments" />
-                    </div>
-                    <div>
-                        <p className='text-3xl font-serif text-text-dark'>{dashboardData.comments}</p>
-                        <p className='text-xs font-bold uppercase tracking-widest text-text-muted mt-1'>Reflections</p>
-                    </div>
-                </div>
-
-                <div className='flex items-center gap-6 bg-white p-8 rounded-[32px] border border-accent/10 shadow-sm hover:shadow-md transition-shadow cursor-pointer group'>
-                    <div className='w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors'>
-                        <img src={assets.dashboard_icon_3} className='w-8' alt="drafts" />
-                    </div>
-                    <div>
-                        <p className='text-3xl font-serif text-text-dark'>{dashboardData.drafts}</p>
-                        <p className='text-xs font-bold uppercase tracking-widest text-text-muted mt-1'>Draftings</p>
-                    </div>
+            <div className='flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all'>
+                <img src={assets.dashboard_icon_1} alt="" />
+                <div>
+                    <p className='text-xl font-semibold text-gray-600'>{dashboardData.blogs}</p>
+                    <p className='text-gray-400 font-light'>Blogs</p>
                 </div>
             </div>
 
-            <div>
-                <div className='flex items-center justify-between mb-8'>
-                    <div className='flex items-center gap-3'>
-                        <div className='w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center'>
-                            <img src={assets.dashboard_icon_4} className='w-5' alt="" />
-                        </div>
-                        <h3 className='text-2xl font-serif text-text-dark'>Latest Entries</h3>
-                    </div>
-                    <button className='text-sm text-primary font-medium hover:underline'>View All</button>
+            <div className='flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all'>
+                <img src={assets.dashboard_icon_2} alt="" />
+                <div>
+                    <p className='text-xl font-semibold text-gray-600'>{dashboardData.comments}</p>
+                    <p className='text-gray-400 font-light'>Comments</p>
                 </div>
+            </div>
 
-                <div className='bg-white rounded-[32px] border border-accent/10 shadow-sm overflow-hidden'>
-                    <table className='w-full text-left'>
-                        <thead className='bg-bg-base/50 text-[10px] uppercase tracking-[0.2em] font-bold text-text-muted border-b border-accent/10'>
-                            <tr>
-                                <th className='px-8 py-5'> # </th>
-                                <th className='px-6 py-5'> Story Title </th>
-                                <th className='px-6 py-5 hidden sm:table-cell'> Date </th>
-                                <th className='px-6 py-5 hidden sm:table-cell'> Status </th>
-                                <th className='px-8 py-5 text-right'> Actions </th>
-                            </tr>
-                        </thead>
-                        <tbody className='divide-y divide-accent/5'>
-                            {dashboardData.recentBlogs.map((blog, index) => {
-                                return <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchDashboard} index={index + 1} />
-                            })}
-                            {dashboardData.recentBlogs.length === 0 && (
-                                <tr>
-                                    <td colSpan="5" className='px-8 py-12 text-center text-text-muted italic'>
-                                        No recent stories found.
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
+            <div className='flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all'>
+                <img src={assets.dashboard_icon_3} alt="" />
+                <div>
+                    <p className='text-xl font-semibold text-gray-600'>{dashboardData.drafts}</p>
+                    <p className='text-gray-400 font-light'>Drafts</p>
                 </div>
             </div>
         </div>
-    )
+
+        <div>
+            <div className='flex items-center gap-3 m-4 mt-6 text-gray-600'>
+                <img src={assets.dashboard_icon_4} alt="" />
+                <p>Latest Blogs</p>
+            </div>
+
+            <div className='relative max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white'>
+                <table className='w-full text-sm text-gray-500'>
+                    <thead className='text-xs text-gray-600 text-left uppercase'>
+                        <tr>
+                            <th scope='col' className='px-2 py-4 xl:px-6'> # </th>
+                            <th scope='col' className='px-2 py-4'> Blog Title </th>
+                            <th scope='col' className='px-2 py-4 max-sm:hidden'> Date </th>
+                            <th scope='col' className='px-2 py-4 max-sm:hidden'> Status </th>
+                            <th scope='col' className='px-2 py-4'> Actions </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {dashboardData.recentBlogs.map((blog, index)=>{
+                            return <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchDashboard} index={index + 1}/>
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      
+    </div>
+  )
 }
 
 export default Dashboard
